@@ -21,10 +21,10 @@
     },
     "content_scripts": [
         {
-            "css": ["css/jBox.css"],
+            "css": ["css/popover.css"],
             "js": [
                 "js/jquery.min.js",
-                "js/jBox.min.js",
+                "js/popover.js",
                 "js/content.js"
             ],
             "matches": ["*://*/*"],

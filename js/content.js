@@ -1,28 +1,8 @@
-var option = {
-    title: '单词本',
-    content: 'wordBook',
-    trigger: 'click'
-};
-
 var currentTip = null;
 
 $(document).ready( function() {
     $("body").mouseup( function() {
-        option.attach = document.getSelection().focusNode.parentElement;
-        option.position = {
-            x: 'right',
-            y: 'bottom'
-        };
-        option.adjustPosition = true;
-        option.adjustTracker = true;
-        option.content = document.getSelection().toString();
-
-        currentTip = new jBox('Tooltip', option).open();
-    });
-    $("body").mousedown( function() {
-        if (currentTip) {
-            currentTip.close();
-        }
+        currentTip = popover();
     });
 });
 
