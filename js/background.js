@@ -1,4 +1,4 @@
-function baidu(query) {// 多个query可以用\n连接  如 query='apple\norange\nbanana\npear'
+function baidu(query, callback) {// 多个query可以用\n连接  如 query='apple\norange\nbanana\npear'
     var appid = '20160106000008641';
     var key = 'LVjWg6Iy2890a58vIAzg';
     var salt = (new Date).getTime();
@@ -19,7 +19,9 @@ function baidu(query) {// 多个query可以用\n连接  如 query='apple\norange
             sign: sign
         },
         success: function (data) {
+            data.wbAPI = 'baidu';
             console.log(data);
+            callback(data);
         },
         error: function (XHR, errInfo) {
             console.error(errInfo);
@@ -39,7 +41,7 @@ function baidu(query) {// 多个query可以用\n连接  如 query='apple\norange
     });
 }
 
-function youdao(query) {
+function youdao(query, callback) {
     $.ajax({
         url: 'http://fanyi.youdao.com/openapi.do',
         type: 'get',
@@ -53,7 +55,9 @@ function youdao(query) {
             version: '1.1'
         },
         success: function (data) {
+            data.wbAPI = 'youdao';
             console.log(data);
+            callback(data);
         },
         error: function (XHR, errInfo) {
             console.error(errInfo);
@@ -67,10 +71,10 @@ function youdao(query) {
     });
 }
 
-function lookup(query) {
-    if (query.split(" ").length > 1) {
-        baidu(query);
+function lookup(query, callback) {
+    if (query.split(" ").length > 0) {
+        return baidu(query, callback);
     } else {
-        youdao(query);
+        return youdao(query, callback);
     }
 }

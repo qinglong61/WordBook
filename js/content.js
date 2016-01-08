@@ -1,39 +1,55 @@
-var currentTip = null;
-
-$(document).ready( function() {
-    $("body").mouseup( function() {
-        currentTip = popover();
+$(document).ready(function() {
+    $("body").mouseup(function() {
+        var selection = window.getSelection().toString();
+        // if (isEnglish(selection)) {
+        //     lookup(selection, function (response) {
+        //         var html = generateHtml(response);
+        //         popover(html);
+        //     });
+        // }
+        var english = extractEnglish(selection);
+        if (english && english.length) {
+            lookup(english, function (response) {
+                var html = generateHtml(response);
+                popover(html);
+            });
+        }
+    });
+    $("body").mousedown(function() {
+        hidePopover();
     });
 });
 
-function isEnglish(s) {
-	for (var i = 0; i < s.length; i++) {
-		if (s.charCodeAt(i) > 126) {
-			return false;
-		}
-	}
-	return true;
+function generateHtml(response) {
+    var html = '';
+    if (response.wbAPI == 'baidu') {
+
+    } else if (response.wbAPI == 'youdao') {
+        html += '<h3 class="popover-title"><p><span class="word">' + response.query + '</span></p>';
+        for (var i = 0; i < response.basic.explains.length; i++) {
+            var item = response.basic.explains[i];
+            html += '<p><span class="word">' + item + '</span></p>';
+        }
+    }
+    return html;
 }
 
-function isAlpha(str) {
-	return /[a-zA-Z']+/.test(str);
+function isEnglish(a) {
+    for (var b = 0; b < a.length; b++) if (a.charCodeAt(b) > 126) return !1;
+    return !0
 }
 
-function spaceCount(temp) {
-	var cnt = 0;
-	for (var i = 0; i < temp.length; i++) {
-		if (temp.charAt(i) == ' ') {
-			cnt++;
-		}
-	}
-	return cnt;
+function isAlpha(a) {
+    return /[a-zA-Z']+/.test(a)
 }
 
-function ExtractEnglish(word) {
-	var patt = new RegExp(/([a-zA-Z ]+)/);
-	var results = patt.exec(word);
-	if( results && results.length ){
-		return results[1];
-	}
-	return '';
+function spaceCount(a) {
+    for (var b = 0, c = 0; c < a.length; c++) " " == a.charAt(c) && b++;
+    return b
+}
+
+function extractEnglish(a) {
+    var b = new RegExp(/([a-zA-Z ]+)/),
+        c = b.exec(a);
+    return c && c.length ? c[1] : ""
 }

@@ -10,8 +10,7 @@
     },
     "background": {
         "scripts": [
-            "js/background.js",
-            "js/md5.js"
+            "js/background.js"
         ]
     },
     "browser_action": {
@@ -24,6 +23,7 @@
             "css": ["css/popover.css"],
             "js": [
                 "js/jquery.min.js",
+                "js/md5.js",
                 "js/popover.js",
                 "js/content.js"
             ],
