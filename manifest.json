@@ -10,6 +10,8 @@
     },
     "background": {
         "scripts": [
+            "js/jquery.min.js",
+            "js/md5.js",
             "js/background.js"
         ]
     },
@@ -23,7 +25,6 @@
             "css": ["css/popover.css"],
             "js": [
                 "js/jquery.min.js",
-                "js/md5.js",
                 "js/popover.js",
                 "js/content.js"
             ],
@@ -38,7 +39,7 @@
         "storage",
         "notifications",
         "*://*/*",
-        "\u003Call_urls\u003E"
+        "<all_urls>"
     ],
     "web_accessible_resources": [
         "images/icon_48.png",

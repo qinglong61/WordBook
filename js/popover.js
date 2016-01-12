@@ -1,11 +1,20 @@
-function popover(innerHtml) {
-
-    var html = '<div id="wb_popover">' +
-    '<div class="popover-pointer"></div>' +
-    '<div class="popover-container">' +
-    innerHtml +
+function popover(title, innerHtml) {
+    var html = '<div class="wb_popover" id="wb_popover">' +
+    '<div class="wb_popover_container">' +
+    '<div class="wb_popover_title">' +
+    '<span>' +
+    title +
+    '</span>' +
     '</div>' +
+    '<div class="wb_popover_content">' +
+    '<p style="margin:0 8px">' +
+    innerHtml +
+    '</p>' +
+    '</div>' +
+    '</div>' +
+    '<div class="wb_popover_pointer"><em></em><ins></ins></div>' +
     '</div>';
+
     $('#wb_popover').remove();
     $('body').append(html);
 
@@ -17,7 +26,7 @@ function hidePopover() {
 }
 
 function config() {
-    var pointerSize = 15;
+    var pointerSize = 30;
     var pointerIndent = 10;
     var border_radius = 6;
 
@@ -30,19 +39,16 @@ function config() {
         var top = $(dummy).offset().top + $(dummy).height();
         dummy.remove();
 
-        var pointerLeft = border_radius + pointerIndent;
-        var pointerTop = -1 * pointerSize * 0.5;
-        $('.popover-pointer').css({
-            position: 'absolute',
-            left: pointerLeft,
-            top: pointerTop,
-            width: pointerSize,
-            height: pointerSize
-        });
         $('#wb_popover').css({
             position: 'absolute',
-            left: left - pointerLeft - pointerSize * 0.707 + 3,
-            top: top - pointerTop + 5
+            left: left - border_radius - pointerIndent - pointerSize/2,
+            top: top + pointerSize/2
         });
+        $('.wb_popover_pointer').css({
+            position: 'absolute',
+            left: border_radius + pointerIndent,
+            top: -1 * pointerSize
+        });
+
     }
 }

@@ -1,4 +1,4 @@
-function baidu(query, callback) {// 多个query可以用\n连接  如 query='apple\norange\nbanana\npear'
+function baidu_api_trans(query, callback) {// 多个query可以用\n连接  如 query='apple\norange\nbanana\npear'
     var appid = '20160106000008641';
     var key = 'LVjWg6Iy2890a58vIAzg';
     var salt = (new Date).getTime();
@@ -19,7 +19,7 @@ function baidu(query, callback) {// 多个query可以用\n连接  如 query='app
             sign: sign
         },
         success: function (data) {
-            data.wbAPI = 'baidu';
+            data.wbAPI = 'baidu_trans';
             console.log(data);
             callback(data);
         },
@@ -37,6 +37,28 @@ function baidu(query, callback) {// 多个query可以用\n连接  如 query='app
 // 58001	译文语言方向不支持	检查译文语言是否在语言列表里
 // 54004	账户余额不足	前往管理控制台为账户充值
 // 54005	长query请求频繁	请降低长query的发送频率，3s后再试
+        }
+    });
+}
+
+function baidu_api_dict(query, callback) {//从百度翻译的插件抓包找出来的
+    $.ajax({
+        url: 'http://openapi.baidu.com/public/2.0/translate/dict/inner?',
+        type: 'GET',
+        data: {
+            q: query,
+            client_id: 'pTjX2N3Kne0P6xuGZzRBWE6D',
+            sec_key: 'VIhvXpx8vuE1LXZOmTWvtlGF',
+            from: 'en',
+            to: 'zh'
+        },
+        success: function (data) {
+            data.wbAPI = 'baidu_dict';
+            console.log(data);
+            callback(data);
+        },
+        error: function (XHR, errInfo) {
+            console.error(errInfo);
         }
     });
 }
@@ -71,10 +93,28 @@ function youdao(query, callback) {
     });
 }
 
+function trim(str) {
+    str = str.replace(/^(\s|\u00A0)+/,'');
+    for(var i=str.length-1; i>=0; i--){
+        if(/\S/.test(str.charAt(i))){
+            str = str.substring(0, i+1);
+            break;
+        }
+    }
+    return str;
+}
+
 function lookup(query, callback) {
-    if (query.split(" ").length > 0) {
-        return baidu(query, callback);
+    query = trim(query);
+    if (query.split(" ").length > 1) {
+        return baidu_api_trans(query, callback);
     } else {
         return youdao(query, callback);
+        // return baidu_api_dict(query, callback);
     }
 }
+
+chrome.runtime.onMessage.addListener(function (english, sender, callback) {
+    lookup(english, callback);
+    return true;
+});

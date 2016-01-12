@@ -1,17 +1,11 @@
 $(document).ready(function() {
     $("body").mouseup(function() {
         var selection = window.getSelection().toString();
-        // if (isEnglish(selection)) {
-        //     lookup(selection, function (response) {
-        //         var html = generateHtml(response);
-        //         popover(html);
-        //     });
-        // }
         var english = extractEnglish(selection);
         if (english && english.length) {
-            lookup(english, function (response) {
+            chrome.runtime.sendMessage(english, function (response) {
                 var html = generateHtml(response);
-                popover(html);
+                popover(english, html);
             });
         }
     });
