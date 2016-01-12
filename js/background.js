@@ -104,13 +104,22 @@ function trim(str) {
     return str;
 }
 
+function extractEnglishWord(a) {
+    var b = new RegExp(/([a-zA-Z'-]+)/),
+        c = b.exec(a);
+    return c && c.length ? c[1] : ""
+}
+
 function lookup(query, callback) {
     query = trim(query);
     if (query.split(" ").length > 1) {
-        return baidu_api_trans(query, callback);
+        baidu_api_trans(query, callback);
     } else {
-        return youdao(query, callback);
-        // return baidu_api_dict(query, callback);
+        var word = extractEnglishWord(query);
+        if (word && word.length) {
+            baidu_api_dict(word, callback);
+            // youdao(word, callback);
+        }
     }
 }
 
