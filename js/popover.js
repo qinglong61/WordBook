@@ -1,3 +1,5 @@
+var wb_popover_lock;
+
 function popover(response) {
     var html = '<div class="wb_popover" id="wb_popover">' +
     '<div class="wb_popover_container">' +
@@ -14,7 +16,27 @@ function popover(response) {
     $('#wb_popover').remove();
     $('body').append(html);
 
-    config();
+    $('#wb_popover').mouseenter(function() {
+        wb_popover_lock = true;
+    });
+    $('#wb_popover').mouseleave(function() {
+        wb_popover_lock = false;
+    });
+    $("#wb_popover .speaker").click(function(event) {
+        var query = $("#wb_popover .query").text();
+        var lang = $(event.target).prev().prev().text();
+        chrome.runtime.sendMessage({
+            type:'speak',
+            data:{
+                text: query,
+                lang: lang
+            }
+        }, function () {
+            // console.log('speak end');
+        });
+    });
+
+    configCSS();
 }
 
 function generateTitleHtml(response) {
@@ -69,13 +91,15 @@ function generateContentHtml(response) {
     return html;
 }
 
-function hidePopover(event) {
-    if (event.target != $('#wb_popover')) {
-        $('#wb_popover').remove();
-    }
+function isPointAtPopover(event) {
+    return $('#wb_popover').has($(event.target))[0]?true:false;
 }
 
-function config() {
+function hidePopover(event) {
+    $('#wb_popover').remove();
+}
+
+function configCSS() {
     var pointerSize = 30;
     var pointerIndent = 10;
     var border_radius = 6;
@@ -99,6 +123,5 @@ function config() {
             left: border_radius + pointerIndent,
             top: -1 * pointerSize
         });
-
     }
 }

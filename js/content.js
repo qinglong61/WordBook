@@ -1,14 +1,26 @@
+var enabled = false;
+
 $(document).ready(function() {
-    $("body").mouseup(function() {
-        var selection = window.getSelection().toString();
-        if (isEnglish(selection)) {
-            chrome.runtime.sendMessage(selection, function (response) {
-                popover(response);
-            });
+    $("body").mouseup(function(e) {
+        if (!wb_popover_lock && enabled) {
+            var selection = window.getSelection().toString();
+            if (isEnglish(selection)) {
+                chrome.runtime.sendMessage({
+                    type:'trans',
+                    data:selection
+                }, function (response) {
+                    popover(response);
+                });
+            }
         }
     });
     $("body").mousedown(function(e) {
-        hidePopover(e);
+        if (!wb_popover_lock) {
+            chrome.storage.local.get('enabled', function (item) {
+                enabled = item.enabled;
+            });
+            hidePopover(e);
+        }
     });
 });
 

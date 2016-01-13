@@ -20,7 +20,7 @@ function baidu_api_trans(query, callback) {// 多个query可以用\n连接  如 
         },
         success: function (data) {
             data.wbAPI = 'baidu_trans';
-            console.log(data);
+            // console.log(data);
             callback(data);
         },
         error: function (XHR, errInfo) {
@@ -54,7 +54,7 @@ function baidu_api_dict(query, callback) {//从百度翻译的插件抓包找出
         },
         success: function (data) {
             data.wbAPI = 'baidu_dict';
-            console.log(data);
+            // console.log(data);
             callback(data);
         },
         error: function (XHR, errInfo) {
@@ -78,7 +78,7 @@ function youdao(query, callback) {
         },
         success: function (data) {
             data.wbAPI = 'youdao';
-            console.log(data);
+            // console.log(data);
             callback(data);
         },
         error: function (XHR, errInfo) {
@@ -123,7 +123,30 @@ function lookup(query, callback) {
     }
 }
 
-chrome.runtime.onMessage.addListener(function (english, sender, callback) {
-    lookup(english, callback);
+chrome.runtime.onMessage.addListener(function (request, sender, callback) {
+    if (request.type == 'trans') {
+        lookup(request.data, callback);
+    } else if (request.type == 'speak') {
+        chrome.tts.speak(request.data.text, {
+            lang: request.data.lang=='美'?'en-US':'en-GB',
+            // gender: 'female',
+            // voiceName: request.data.lang=='美'?'Google US English':'Google UK English Female',
+            // enqueue: true,
+            rate: 1.0, //0.1~10.0
+            pitch: 1.0, //0~2.0
+            volume: 1.0 //0~1.0
+        }, callback);
+    }
     return true;
 });
+
+// chrome.tts.getVoices(function(voices) {
+//     for (var i = 0; i < voices.length; i++) {
+//         console.log('Voice ' + i + ':');
+//         console.log('  name: ' + voices[i].voiceName);
+//         console.log('  lang: ' + voices[i].lang);
+//         console.log('  gender: ' + voices[i].gender);
+//         console.log('  extension id: ' + voices[i].extensionId);
+//         console.log('  event types: ' + voices[i].eventTypes);
+//     }
+// });

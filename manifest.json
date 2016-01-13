@@ -33,13 +33,10 @@
         }
     ],
     "permissions": [
-        "contextMenus",
-        "activeTab",
-        "tabs",
         "storage",
-        "notifications",
         "*://*/*",
-        "<all_urls>"
+        "<all_urls>",
+        "tts"
     ],
     "web_accessible_resources": [
         "images/icon_48.png",
